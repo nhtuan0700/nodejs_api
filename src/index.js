@@ -7,9 +7,11 @@ const route = require('./routes')
 const app = express()
 
 // Middleware
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+)
 app.use(express.json())
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -18,9 +20,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Template engine
 // hbs: all views ignore layout
-app.engine('hbs', handlebars.engine({
-  extname: '.hbs', // layout
-}))
+app.engine(
+  'hbs',
+  handlebars.engine({
+    extname: '.hbs', // layout
+  })
+)
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'resources/views'))
 
@@ -30,4 +35,6 @@ const port = 3000
 route(app)
 
 // 127.0.0.1 - localhost
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(port, () =>
+  console.log(`Example app listening at http://localhost:${port}`)
+)
