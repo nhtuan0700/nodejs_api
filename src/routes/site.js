@@ -3,7 +3,7 @@ const router = express.Router()
 
 const siteController = require('../app/controllers/SiteController')
 
-router.use('/about', siteController.about)
-router.use('/', siteController.index)
+router.get('/about', siteController.about)
+router.get('/', siteController.index)
 
 module.exports = router
