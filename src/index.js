@@ -4,8 +4,11 @@ const handlebars = require('express-handlebars')
 const path = require('path')
 const route = require('./routes')
 const db = require('./config/db')
+var methodOverride = require('method-override')
 
 const app = express()
+// overide method
+app.use(methodOverride('_method'))
 
 // Middleware
 app.use(
@@ -24,7 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.engine(
   'hbs',
   handlebars.engine({
-    extname: '.hbs', // layout
+    extname: '.hbs', // layout,
+    helpers: {
+      sum: (a, b) => a + b,
+    },
   })
 )
 app.set('view engine', 'hbs')

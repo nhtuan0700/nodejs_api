@@ -1,0 +1,87 @@
+<div class="mt-4">
+  <a href="/me/stored/courses">Back</a>
+  <h3>My course stored</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Deleted at</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each courses}}
+      <tr>
+        <td>{{sum @index 1}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+        <td>{{this.deletedAt}}</td>
+        <td>
+          <a href="#" class="btn btn-link btn-restore-course" data-id="{{this._id}}">
+            Restore
+          </a>
+          <a href="/courses/{{this._id}}/edit" data-bs-toggle="modal" data-bs-target="#delete-course-modal"
+            data-bs-whatever="{{this._id}}" class="btn btn-link">Delete forever</a>
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="5" class="text-center">Trash Empty!</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="modal" id="delete-course-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete forever course</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure delete forever this course?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btn-delete-course">OK!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form action="" method="POST" name="delete-course-form"></form>
+<form action="" method="POST" name="restore-course-form"></form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let courseId
+    const restoreCourseBtnList = Array.from(document.querySelectorAll('.btn-restore-course'))
+    const deleteCourseBtn = document.querySelector('#btn-delete-course')
+    const deleteModal = document.querySelector('#delete-course-modal')
+    const restoreForm = document.forms['restore-course-form']
+    const deleteForm = document.forms['delete-course-form']
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget
+      courseId = button.getAttribute('data-bs-whatever')
+    })
+
+    deleteCourseBtn.addEventListener('click', function (e) {
+      deleteForm.action = `/courses/${courseId}/force?_method=DELETE`
+      deleteForm.submit()
+    })
+
+    restoreCourseBtnList.forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault()
+        const courseRestoreId = e.target.dataset['id']
+        restoreForm.action = `/courses/${courseRestoreId}/restore?_method=PATCH`
+        restoreForm.submit()
+      })
+    })
+  })
+</script>

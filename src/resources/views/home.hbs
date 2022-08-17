@@ -1,9 +1,16 @@
-<div class="mt-3">
-  <form method="post" action="">
-    <div class="mb-3">
-      <label for="keyword" class="form-label">Từ khóa</label>
-      <input type="text" class="form-control" id="q" name="q">
+<div class="mt-4">
+  <div class="row g-3">
+    {{#each courses}}
+    <div class="col-sm-6 col-md-4">
+      <div class="card h-100">
+        <img src="{{image}}" />
+        <div class="card-body">
+          <h5 class="card-title">{{title}}</h5>
+        </div>
+        <p class="card-text">{{this.description}}</p>
+        <a href="#" class="btn btn-primary">Go</a>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-  </form>
+    {{/each}}
+  </div>
 </div>

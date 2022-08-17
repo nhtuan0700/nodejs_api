@@ -1,5 +1,8 @@
 @import '_variable.scss';
-
+img {
+  object-fit: cover;
+  width: 100%;
+}
 h1 {
   color: $red;
 }
