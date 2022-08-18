@@ -1,10 +1,24 @@
-<div class="mt-4">
+<form class="mt-4" method="POST" action="/courses/handle-form-actions" name="handle-form-actions">
   <a href="/me/stored/courses">Back</a>
   <h3>My course stored</h3>
+  <div class="d-flex align-items-center my-4">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="checkbox-all">
+      <label class="form-check-label" for="checkbox-all">
+        Select all
+      </label>
+    </div>
+    <select class="form-select form-select-sm select-action" name="action" required>
+      <option value="">--Select action--</option>
+      <option value="restore">Restore</option>
+      <option value="force-delete">Delete forever</option>
+    </select>
+    <button type="submit" class="btn btn-primary disabled" id="check-action-submit">Excute</button>
+  </div>
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col" colspan="2">#</th>
         <th scope="col">Name</th>
         <th scope="col">Description</th>
         <th scope="col">Deleted at</th>
@@ -14,6 +28,11 @@
     <tbody>
       {{#each courses}}
       <tr>
+        <td>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="courseIds[]" value="{{this._id}}">
+          </div>
+        </td>
         <td>{{sum @index 1}}</td>
         <td>{{this.name}}</td>
         <td>{{this.description}}</td>
@@ -33,7 +52,7 @@
       {{/each}}
     </tbody>
   </table>
-</div>
+</form>
 
 <div class="modal" id="delete-course-modal" tabindex="-1">
   <div class="modal-dialog">
@@ -64,6 +83,10 @@
     const deleteModal = $('#delete-course-modal')
     const restoreForm = document.forms['restore-course-form']
     const deleteForm = document.forms['delete-course-form']
+    const handleActionsForm = document.forms['handle-form-actions']
+    const submitActionBtn = $('#check-action-submit')
+    const courseItemCheckboxList = Array.from($$('input[name="courseIds[]"]'))
+    const checkboxAll = $('#checkbox-all')
 
     deleteModal.addEventListener('show.bs.modal', function (event) {
       const button = event.relatedTarget
@@ -83,5 +106,36 @@
         restoreForm.submit()
       })
     })
+
+    checkboxAll.addEventListener('change', function (e) {
+      const isCheckedAll = e.target.checked
+      courseItemCheckboxList.forEach(courseCheckbox => {
+        courseCheckbox.checked = isCheckedAll
+        renderBackgroundCheckboxSelected(courseCheckbox)
+        renderSubmitButtonIfChecked()
+      })
+    })
+
+    courseItemCheckboxList.forEach(courseItemCheckBox => {
+      courseItemCheckBox.addEventListener('change', function (e) {
+        const isCheckedAll = courseItemCheckboxList.every(item => item.checked)
+        checkboxAll.checked = isCheckedAll
+        renderBackgroundCheckboxSelected(courseItemCheckBox)
+        renderSubmitButtonIfChecked()
+      })
+    })
+
+    function renderBackgroundCheckboxSelected(checkboxElm) {
+      checkboxElm.closest('tr').style.backgroundColor = checkboxElm.checked ? '#f8f9fa' : ''
+    }
+
+    function renderSubmitButtonIfChecked() {
+      const isExistChecked = !!$('input[name="courseIds[]"]:checked')
+      if (isExistChecked) {
+        submitActionBtn.classList.remove('disabled')
+      } else {
+        submitActionBtn.classList.add('disabled')
+      }
+    }
   })
 </script>
