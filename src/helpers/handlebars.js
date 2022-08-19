@@ -6,8 +6,8 @@ module.exports = {
     const sortType = field === sort.column ? sort.type : 'default'
     const icons = {
       default: 'fa-solid fa-sort',
-      asc: 'fa-solid fa-sort-up',
-      desc: 'fa-solid fa-sort-down',
+      asc: 'fa-solid fa-arrow-down-short-wide',
+      desc: 'fa-solid fa-arrow-down-wide-short',
     }
     const types = {
       default: 'desc',

@@ -21,7 +21,7 @@ app.use(express.json())
 
 app.use(express.static(path.join(__dirname, 'public')))
 // HTTP LOGGER
-app.use(morgan('combined'))
+// app.use(morgan('combined'))
 
 // Template engine
 // hbs: all views ignore layout

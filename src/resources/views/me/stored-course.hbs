@@ -19,13 +19,23 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th scope="col" colspan="2">#</th>
+        <th scope="col">#</th>
+        <th>
+          ID
+          {{{sortable '_id' _sort}}}
+        </th>
         <th scope="col">
           Name
           {{{sortable 'name' _sort}}}
         </th>
-        <th scope="col">Description</th>
-        <th scope="col">Created at</th>
+        <th scope="col">
+          Description
+          {{{sortable 'description' _sort}}}
+        </th>
+        <th scope="col">
+          Created at
+          {{{sortable 'createdAt' _sort}}}
+        </th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -37,7 +47,7 @@
             <input type="checkbox" class="form-check-input" name="courseIds[]" value="{{this._id}}">
           </div>
         </td>
-        <td>{{sum @index 1}}</td>
+        <td>{{this._id}}</td>
         <td>{{this.name}}</td>
         <td>{{this.description}}</td>
         <td>{{this.createdAt}}</td>
