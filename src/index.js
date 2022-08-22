@@ -2,10 +2,11 @@ const express = require('express')
 const morgan = require('morgan')
 const handlebars = require('express-handlebars')
 const path = require('path')
-const route = require('./routes')
 const db = require('./config/db')
 var methodOverride = require('method-override')
 const SortMiddleware = require('./app/middlewares/sortMiddleware')
+const router = require('./routes')
+const createError = require('http-errors')
 
 const app = express()
 // overide method
@@ -43,7 +44,23 @@ db.connect()
 const port = 3000
 
 // Init route
-route(app)
+app.get('/', (req, res, next) => {
+  next(createError.InternalServerError('ABC'))
+})
+app.use('/', router)
 
+app.use((req, res, next) => {
+  res.status(404)
+  next(createError(404, 'Invalid router'))
+})
+
+app.use((err, req, res, next) => {
+  const status = err.status || 500
+  res.status(status)
+  res.json({
+    status: status,
+    error: err.message,
+  })
+})
 // 127.0.0.1 - localhost
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
